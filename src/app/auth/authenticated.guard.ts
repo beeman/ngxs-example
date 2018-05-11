@@ -14,14 +14,13 @@ export class AuthenticatedGuard implements CanActivate {
 
   @Select(AuthState.getUser) user$: Observable<User | undefined>;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) { }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     return this.user$.pipe(
-      map(u => {
-        if (!u) {
+      map(userInfo => {
+        if (!userInfo)
           this.store.dispatch(new LoginRedirect());
-        }
         return true;
       })
     );
